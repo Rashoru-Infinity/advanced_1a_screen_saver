@@ -20,11 +20,13 @@ status_e extstr_init(extstr_t *str)
 		return FAIL;
 	str->real_size = 10;
 	str->size = 0;
+	return SUCCESS;
 }
 
 static status_e extstr_extend(extstr_t *str)
 {
 	char *new_array;
+
 	if (!str)
 		return FAIL;
 	if (!(new_array = realloc(str->str, sizeof(char) * str->real_size * 2)))
@@ -35,13 +37,17 @@ static status_e extstr_extend(extstr_t *str)
 
 status_e extstr_append(extstr_t *str, char *new_str)
 {
+	size_t	new_str_len;
+
+	new_str_len = strlen(new_str);
 	if (!new_str)
 		return FAIL;
-	if (str->size + strlen(new_str) >= str->real_size)
+	if (str->size + new_str_len >= str->real_size)
 	{
 		if (extstr_extend(str) == FAIL)
 			return FAIL;
 	}
-	strcpy(str->str, new_str);
-	str->size += strlen(new_str);
+	strcpy(str->str + str->size, new_str);
+	str->size += new_str_len;
+	return SUCCESS;
 }
