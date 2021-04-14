@@ -26,4 +26,6 @@ typedef struct {
 status_e extstr_init(extstr_t *str);
 status_e extstr_append(extstr *str, char *new_str);
 
+status_e read_file(const char *file_name, extstr_t *content);
+
 #endif
