@@ -18,6 +18,6 @@ int main(void)
 
 	extstr_init(&content);
 	read_file("test.txt", &content);
-	content.str[content.size] = '\0';
+	content.str[content.curr_size] = '\0';
 	printf("%s\n", content.str);
 }
