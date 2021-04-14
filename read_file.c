@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <scr.h>
+#include <string.h>
 
 status_e read_file(const char *file_name, extstr_t *content)
 {
