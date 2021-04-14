@@ -9,7 +9,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRCS	=	extstr.c read_file.c
+SRCS	=	extstr.c read_file.c debug.c
 CC		= gcc
 INC		= -I$(shell pwd)
 CFLAGS	= -Wall -Wextra -Werror $(INC)
