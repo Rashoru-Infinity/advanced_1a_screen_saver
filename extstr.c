@@ -12,6 +12,7 @@
 #include <scr.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 
 status_e extstr_init(extstr_t *str)
 {
@@ -30,9 +31,12 @@ static status_e extstr_extend(extstr_t *str)
 
 	if (!str)
 		return FAIL;
+	if (str->real_size > SIZE_MAX / 2)
+		return FAIL;
 	if (!(new_array = realloc(str->str, sizeof(char) * str->real_size * 2)))
 		return FAIL;
 	str->str = new_array;
+	str->real_size *= 2;
 	return SUCCESS;
 }
 
@@ -40,7 +44,7 @@ status_e extstr_append(extstr_t *str, char *new_str, size_t len)
 {
 	if (!new_str || !str)
 		return FAIL;
-	if (str->curr_size + len >= str->real_size)
+	while (str->curr_size + len >= str->real_size)
 	{
 		if (extstr_extend(str) == FAIL)
 			return FAIL;
