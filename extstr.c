@@ -9,7 +9,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <type.h>
+#include <scr.h>
 #include <stdlib.h>
 
 status_e extstr_init(extstr_t *str)
