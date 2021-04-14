@@ -12,7 +12,7 @@
 #include <scr.h>
 #include <stdlib.h>
 #include <string.h>
-#include <limits.h>
+#include <stdint.h>
 
 status_e extstr_init(extstr_t *str)
 {
