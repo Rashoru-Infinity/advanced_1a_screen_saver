@@ -35,19 +35,16 @@ static status_e extstr_extend(extstr_t *str)
 	return SUCCESS;
 }
 
-status_e extstr_append(extstr_t *str, char *new_str)
+status_e extstr_append(extstr_t *str, char *new_str, size_t len)
 {
-	size_t	new_str_len;
-
-	new_str_len = strlen(new_str);
 	if (!new_str || !str)
 		return FAIL;
-	if (str->size + new_str_len >= str->real_size)
+	if (str->size + len >= str->real_size)
 	{
-		if (extstr_extend(str) == FAIL)
+		if (extstr_extend(str, len) == FAIL)
 			return FAIL;
 	}
 	strcpy(str->str + str->size, new_str);
-	str->size += new_str_len;
+	str->size += len;
 	return SUCCESS;
 }

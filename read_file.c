@@ -23,7 +23,7 @@ status_e read_file(const char *file_name, extstr_t *content)
 
 	if (!file_name || !content)
 		return FAIL;
-	if (!(fp = fopen(file_name, "r", fp)))
+	if (!(fp = fopen(file_name, "r")))
 		return FAIL;
 	while (!feof(fp))
 	{
