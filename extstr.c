@@ -40,7 +40,7 @@ status_e extstr_append(extstr_t *str, char *new_str)
 	size_t	new_str_len;
 
 	new_str_len = strlen(new_str);
-	if (!new_str)
+	if (!new_str || !str)
 		return FAIL;
 	if (str->size + new_str_len >= str->real_size)
 	{

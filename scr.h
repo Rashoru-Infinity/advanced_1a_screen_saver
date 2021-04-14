@@ -23,4 +23,7 @@ typedef struct {
 	size_t	curr_size;
 }		extstr_t;
 
+status_e extstr_init(extstr_t *str);
+status_e extstr_append(extstr *str, char *new_str);
+
 #endif
