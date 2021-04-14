@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <type.h>
 
-char *read_file(const char *file_name)
+status_e read_file(const char *file_name, extstr_t *content)
 {
+	
 }
