@@ -2,3 +2,5 @@
 read_test.c
 *.txt
 *.*.swp
+*.lib
+*.obj
