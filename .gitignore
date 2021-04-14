@@ -1,2 +1,4 @@
-*.o
-*.a
+*.exe
+read_test.c
+*.txt
+*.*.swp
