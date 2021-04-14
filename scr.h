@@ -12,8 +12,7 @@
 #ifndef TYPE_H
 #define TYPE_H
 #include <BaseTsd.h>
-
-typedef SIZE_T size_t;
+#include <stddef.h>
 
 typedef enum {
 	SUCCESS,
