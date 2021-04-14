@@ -11,6 +11,7 @@
 
 #include <scr.h>
 #include <stdlib.h>
+#include <string.h>
 
 status_e extstr_init(extstr_t *str)
 {
@@ -19,7 +20,7 @@ status_e extstr_init(extstr_t *str)
 	if (!(str->str = malloc(sizeof(char) * 10)))
 		return FAIL;
 	str->real_size = 10;
-	str->size = 0;
+	str->curr_size = 0;
 	return SUCCESS;
 }
 
@@ -39,12 +40,12 @@ status_e extstr_append(extstr_t *str, char *new_str, size_t len)
 {
 	if (!new_str || !str)
 		return FAIL;
-	if (str->size + len >= str->real_size)
+	if (str->curr_size + len >= str->real_size)
 	{
-		if (extstr_extend(str, len) == FAIL)
+		if (extstr_extend(str) == FAIL)
 			return FAIL;
 	}
-	strcpy(str->str + str->size, new_str);
-	str->size += len;
+	memcpy(str->str + str->curr_size, new_str, len);
+	str->curr_size += len;
 	return SUCCESS;
 }

@@ -11,6 +11,8 @@
 
 #ifndef TYPE_H
 #define TYPE_H
+//#include <BaseTsd.h>
+#define SIZE_T size_t
 
 typedef enum {
 	SUCCESS,
@@ -24,7 +26,7 @@ typedef struct {
 }		extstr_t;
 
 status_e extstr_init(extstr_t *str);
-status_e extstr_append(extstr *str, char *new_str);
+status_e extstr_append(extstr_t *str, char *new_str, size_t len);
 
 status_e read_file(const char *file_name, extstr_t *content);
 

@@ -28,10 +28,10 @@ status_e read_file(const char *file_name, extstr_t *content)
 	while (!feof(fp))
 	{
 		memset(buf, 0x1a, BUF_SIZE);
-		read_size = fread(buf, BUF_SIZE, fp);
+		read_size = fread(buf, sizeof(char), BUF_SIZE, fp);
 		if (ferror(fp))
 			return FAIL;
-		if (extstr_append(content, buf))
+		if (extstr_append(content, buf, read_size))
 			return FAIL;
 	}
 	fclose(fp);
