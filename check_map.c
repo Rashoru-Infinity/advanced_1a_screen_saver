@@ -224,6 +224,7 @@ static status_e check_closed(char **map)
 			//it may indicates player
 			default:
 				vst_stat[curr_height][offset++] = 1;
+			}
 		}
 		curr_height++;
 		s += sizeof(char *);
