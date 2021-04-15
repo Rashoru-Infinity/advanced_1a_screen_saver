@@ -15,17 +15,17 @@
 typedef struct {
 	int x;
 	int y;
-}		int2d_t;
+} int2d_t;
 
 typedef struct {
 	double x;
 	double y;
-}		double2d_t;
+} double2d_t;
 
-typedef struct {
+typedef struct int2d_list_s {
 	int2d_t point;
-	int2d_list_t *next;
-}		int2d_list_t;
+	struct int2d_list_s *next;
+} int2d_list_t;
 
 void list_clear(int2d_list_t **head);
 
