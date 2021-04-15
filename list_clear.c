@@ -1,29 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*   debug.c                                                                  */
+/*   list_clear.c                                                             */
 /*                                                                            */
 /*   By: Keita Hagiwara <al19136@shibaura-it.ac.jp>                           */
 /*                                                                            */
-/*   Created: 2021/04/14 23:17:13 by Keita Hagiwara                           */
-/*   Updated: 2021/04/14 23:17:13 by Keita Hagiwara                           */
+/*   Created: 2021/04/16 00:22:06 by Keita Hagiwara                           */
+/*   Updated: 2021/04/16 00:22:06 by Keita Hagiwara                           */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <scr.h>
+#include <two_dimensions.h>
 
-int main(void)
+void list_clear(int2d_list_t **head)
 {
-	char **map;
-	if (!(map = set_map("sample.map")))
+	int2d_list_t *tmp;
+
+	if (!head)
+		return ;
+	while (*head)
 	{
-		printf("fail to set map\n");
-		exit(0);
+		tmp = *head;
+		*head = (*head)->next;
+		free(tmp);
 	}
-	if (check_map(map) == FAIL)
-	{
-		printf("invalid map\n");
-		exit(0);
-	}
-	printf("no error in map file");
 }

@@ -9,7 +9,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRCS	=	extstr.c read_file.c debug.c set_map.c ft_split.c
+SRCS	=	extstr.c read_file.c debug.c set_map.c ft_split.c check_map.c list_clear.c
 CC		= gcc
 INC		= -I$(shell pwd)
 CFLAGS	= -Wall -Wextra -Werror $(INC)
