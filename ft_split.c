@@ -9,13 +9,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>"
+#include <stdlib.h>
+#include <stdbool.h>
 
 static size_t	count_words(char const *s, char c)
 {
 	size_t offset;
 	size_t words;
-	t_bool countable;
+	bool countable;
 
 	words = 0;
 	countable = false;
