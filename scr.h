@@ -30,4 +30,6 @@ status_e extstr_append(extstr_t *str, char *new_str, size_t len);
 
 status_e read_file(const char *file_name, extstr_t *content);
 
+char **ft_split(char const *s, char c);
+
 #endif
