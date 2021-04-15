@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <scr.h>
+#include <stdlib.h>
 
 int main(void)
 {
