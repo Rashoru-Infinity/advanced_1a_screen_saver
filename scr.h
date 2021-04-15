@@ -32,7 +32,7 @@ status_e read_file(const char *file_name, extstr_t *content);
 
 status_e check_map(char **map);
 
-char **set_map(const char **file_name);
+char **set_map(const char *file_name);
 
 char **ft_split(char const *s, char c);
 
