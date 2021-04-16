@@ -179,6 +179,9 @@ static status_e bfs_map(char **map, int **vst_stat, size_t map_height)
 		queue = queue->next;
 		free(tmp);
 	}
+	for (size_t i = 0;i < map_height;++i)
+		free(vst_stat[i]);
+	free(vst_stat);
 	return SUCCESS;
 }
 
