@@ -9,15 +9,15 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRCS	=	extstr.c read_file.c debug.c set_map.c ft_split.c check_map.c list_clear.c
-CC		= gcc
-INC		= -I$(shell pwd)
-CFLAGS	= -Wall -Wextra -Werror $(INC)
+SRCS	= extstr.c read_file.c debug.c set_map.c ft_split.c check_map.c list_clear.c
+CC	= gcc
+INC	= -I.
+CFLAGS	= -Wall -Wextra -Werror -g $(INC)
 NAME	= al19136.scr
 OBJS	= $(SRCS:.c=.o)
-RM		= rm -f
+RM	= rm -f
 
-all		:	$(NAME)
+all	:	$(NAME)
 
 .c.o	:
 	$(CC) $(CFLAGS) -c $< -o $@
