@@ -42,10 +42,10 @@ static status_e check_str(char **map)
 		offset = 0;
 		while (p[offset])
 		{
-			if (p[offset] != O && p[offset] != X && p[offset] != N && p[offset] != S
-			&& p[offset] != E && p[offset] != W)
+			if (p[offset] != 'O' && p[offset] != 'X' && p[offset] != 'N' && p[offset] != 'S'
+			&& p[offset] != E && p[offset] != 'W')
 				return FAIL;
-			if (p[offset] != O && p[offset] != X)
+			if (p[offset] != 'O' && p[offset] != 'X')
 				++player_count;
 			if (player_count > 1)
 				return FAIL;
@@ -55,7 +55,7 @@ static status_e check_str(char **map)
 	return SUCCESS;
 }
 
-static status_e queue_insert(int2d_list_t **queue_last, int **vst_stat, int x, int y)
+static status_e queue_insert(int2d_list_t **queue_last, int x, int y)
 {
 	int2d_list_t *tmp;
 
@@ -100,34 +100,34 @@ static status_e bfs_map(char **map, int **vst_stat, size_t map_height)
 		//array index check on x axis
 		if (queue->point.x == 0 || (size_t)queue->point.x + 1 == strlen(map[queue->point.y]))
 		{
-			list_clear(queue);
+			list_clear(&queue);
 			return FAIL;
 		}
 		//array index check on y axis
 		if (queue->point.y == 0 || (size_t)queue->point.y + 1 == map_height)
 		{
-			list_clear(queue);
+			list_clear(&queue);
 			return FAIL;
 		}
 		//upward check
 		if (strlen(map[queue->point.y - 1]) <= (size_t)queue->point.x)
 		{
-			list_clear(queue);
+			list_clear(&queue);
 			return FAIL;
 		}
 		//downward check
 		if (strlen(map[queue->point.y + 1]) <= (size_t)queue->point.x)
 		{
-			list_clear(queue);
+			list_clear(&queue);
 			return FAIL;
 		}
 		//insert location on the map where bfs is not visited
 		//try to visit upward
 		if (vst_stat[queue->point.y - 1][queue->point.x] == 0)
 		{
-			if (queue_insert(&queue_last, vst_stat, queue->point.x, queue->point.y - 1) == FAIL)
+			if (queue_insert(&queue_last, queue->point.x, queue->point.y - 1) == FAIL)
 			{
-				list_clear(queue);
+				list_clear(&queue);
 				return (FAIL);
 			}
 			vst_stat[queue->point.y - 1][queue->point.x] = 1;
@@ -137,7 +137,7 @@ static status_e bfs_map(char **map, int **vst_stat, size_t map_height)
 		{
 			if (queue_insert(&queue_last, vst_stat, queue->point.x, queue->point.y + 1) == FAIL)
 			{
-				list_clear(queue);
+				list_clear(&queue);
 				return (FAIL);
 			}
 			vst_stat[queue->point.y + 1][queue->point.x] = 1;
@@ -147,7 +147,7 @@ static status_e bfs_map(char **map, int **vst_stat, size_t map_height)
 		{
 			if (queue_insert(&queue_last, vst_stat, queue->point.x - 1, queue->point.y) == FAIL)
 			{
-				list_clear(queue);
+				list_clear(&queue);
 				return (FAIL);
 			}
 			vst_stat[queue->point.y][queue->point.x - 1] = 1;
@@ -157,7 +157,7 @@ static status_e bfs_map(char **map, int **vst_stat, size_t map_height)
 		{
 			if (queue_insert(&queue_last, vst_stat, queue->point.x + 1, queue->point.y) == FAIL)
 			{
-				list_clear(queue);
+				list_clear(&queue);
 				return (FAIL);
 			}
 			vst_stat[queue->point.y][queue->point.x + 1] = 1;
@@ -230,7 +230,7 @@ static status_e check_closed(char **map)
 		s += sizeof(char *);
 	}
 	//check the player is surrounded by wall
-	return bfs_map(map, vst_stat);
+	return bfs_map(map, vst_stat, map_height);
 }
 
 status_e check_map(char **map)
