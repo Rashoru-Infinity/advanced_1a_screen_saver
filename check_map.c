@@ -17,7 +17,6 @@
 static status_e check_size(char **map)
 {
 	char *p;
-	size_t offset;
 
 	p = *map;
 	while (p)
@@ -43,7 +42,7 @@ static status_e check_str(char **map)
 		while (p[offset])
 		{
 			if (p[offset] != 'O' && p[offset] != 'X' && p[offset] != 'N' && p[offset] != 'S'
-			&& p[offset] != E && p[offset] != 'W')
+			&& p[offset] != 'E' && p[offset] != 'W')
 				return FAIL;
 			if (p[offset] != 'O' && p[offset] != 'X')
 				++player_count;
@@ -65,6 +64,7 @@ static status_e queue_insert(int2d_list_t **queue_last, int x, int y)
 	tmp->point.y = y;
 	(*queue_last)->next = tmp;
 	*queue_last = tmp;
+	return SUCCESS;
 }
 
 static status_e bfs_map(char **map, int **vst_stat, size_t map_height)
@@ -135,7 +135,7 @@ static status_e bfs_map(char **map, int **vst_stat, size_t map_height)
 		//try to visit downward
 		if (vst_stat[queue->point.y + 1][queue->point.x] == 0)
 		{
-			if (queue_insert(&queue_last, vst_stat, queue->point.x, queue->point.y + 1) == FAIL)
+			if (queue_insert(&queue_last, queue->point.x, queue->point.y + 1) == FAIL)
 			{
 				list_clear(&queue);
 				return (FAIL);
@@ -145,7 +145,7 @@ static status_e bfs_map(char **map, int **vst_stat, size_t map_height)
 		//toward the left
 		if (vst_stat[queue->point.y][queue->point.x - 1] == 0)
 		{
-			if (queue_insert(&queue_last, vst_stat, queue->point.x - 1, queue->point.y) == FAIL)
+			if (queue_insert(&queue_last, queue->point.x - 1, queue->point.y) == FAIL)
 			{
 				list_clear(&queue);
 				return (FAIL);
@@ -155,7 +155,7 @@ static status_e bfs_map(char **map, int **vst_stat, size_t map_height)
 		//toward the right
 		if (vst_stat[queue->point.y][queue->point.x + 1] == 0)
 		{
-			if (queue_insert(&queue_last, vst_stat, queue->point.x + 1, queue->point.y) == FAIL)
+			if (queue_insert(&queue_last, queue->point.x + 1, queue->point.y) == FAIL)
 			{
 				list_clear(&queue);
 				return (FAIL);
