@@ -10,6 +10,7 @@
 /* ************************************************************************** */
 
 #include <two_dimensions.h>
+#include <stdlib.h>
 
 void list_clear(int2d_list_t **head)
 {
