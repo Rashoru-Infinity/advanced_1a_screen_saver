@@ -24,7 +24,7 @@ static status_e check_size(char **map)
 	height = 0;
 	while (p)
 	{
-		if (height++ > 10)
+		if (++height > 10)
 			return FAIL;
 		if (strlen(p) > 10)
 			return FAIL;
