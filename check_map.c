@@ -57,6 +57,8 @@ static status_e check_str(char **map)
 		}
 		p = *(++map);
 	}
+	if (player_count == 0)
+		return FAIL;
 	return SUCCESS;
 }
 
@@ -68,6 +70,7 @@ static status_e queue_insert(int2d_list_t **queue_last, int x, int y)
 		return FAIL;
 	tmp->point.x = x;
 	tmp->point.y = y;
+	tmp->next = NULL;
 	(*queue_last)->next = tmp;
 	*queue_last = tmp;
 	return SUCCESS;
@@ -98,7 +101,7 @@ static status_e bfs_map(char **map, int **vst_stat, size_t map_height)
 			break;
 		curr_height++;
 	}
-	if (!(queue = malloc(sizeof(queue))))
+	if (!(queue = malloc(sizeof(int2d_list_t))))
 		return FAIL;
 	queue->point.x = curr_width;
 	queue->point.y = curr_height;
@@ -106,10 +109,8 @@ static status_e bfs_map(char **map, int **vst_stat, size_t map_height)
 	queue_last = queue;
 	while (queue)
 	{
-		printf("aaa\n");
 		//check whther the map is closed or not
 		//array index check on x axis
-		printf("%s\n", map[queue->point.y]);
 		if (queue->point.x == 0 || (size_t)queue->point.x + 1 == strlen(map[queue->point.y]))
 		{
 			list_clear(&queue);
@@ -177,7 +178,6 @@ static status_e bfs_map(char **map, int **vst_stat, size_t map_height)
 		tmp = queue;
 		queue = queue->next;
 		free(tmp);
-		printf("bbb\n");
 	}
 	return SUCCESS;
 }
@@ -218,7 +218,6 @@ static status_e check_closed(char **map)
 				free(vst_stat[curr_height-- - 1]);
 			}
 			free(vst_stat);
-			printf("exited\n");
 			return FAIL;
 		}
 		offset = 0;

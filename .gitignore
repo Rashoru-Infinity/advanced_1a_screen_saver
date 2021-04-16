@@ -4,3 +4,4 @@ read_test.c
 *.*.swp
 *.a
 *.o
+*.scr
