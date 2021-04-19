@@ -15,24 +15,27 @@
 #include <stdlib.h>
 #include <two_dimensions.h>
 
-typedef struct pattern_s {
+typedef struct action_list_s {
 	void (*func)(void *);
 	void *arg;
+	struct action_list_s *next;
+} action_list_t;
+
+typedef struct pattern_s {
+	char *name;
+	action_list_t *ptn;
 	struct pattern_s *next;
 } pattern_t;
 
 typedef struct {
-	void (*func)(void *);
-	void *arg;
-	struct pattern_s *next;
-} action_t;
+	int loop_counter;
+	void *entry_p;
+} stack_pointer_t;
 
 typedef struct {
-	int loop_counter;
 	double2d_t pos;
 	double ahead_remain;
-	double rturn_remain;
-	action_t routine;
+	double lturn_remain;
 } player_t;
 
 #endif
