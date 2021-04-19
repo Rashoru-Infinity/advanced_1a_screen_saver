@@ -179,9 +179,6 @@ static status_e bfs_map(char **map, int **vst_stat, size_t map_height)
 		queue = queue->next;
 		free(tmp);
 	}
-	for (size_t i = 0;i < map_height;++i)
-		free(vst_stat[i]);
-	free(vst_stat);
 	return SUCCESS;
 }
 
@@ -193,6 +190,7 @@ static status_e check_closed(char **map)
 	size_t offset;
 	size_t map_height;
 	size_t curr_height;
+	status_e result;
 
 	s = *map;
 	map_cpy = map;
@@ -250,7 +248,11 @@ static status_e check_closed(char **map)
 	}
 	map = map_cpy;
 	//check the player is surrounded by wall
-	return bfs_map(map, vst_stat, map_height);
+	result = bfs_map(map, vst_stat, map_height);
+	for (size_t i = 0;i < map_height;++i)
+		free(vst_stat[i]);
+	free(vst_stat);
+	return result;
 }
 
 status_e check_map(char **map)
