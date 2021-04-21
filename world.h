@@ -15,9 +15,13 @@
 #include <stdlib.h>
 #include <two_dimensions.h>
 
+typedef struct {
+	double2d_t pos;
+	double2d_t heading;
+} player_t;
+
 typedef struct action_list_s {
-	void (*func)(void *);
-	void *arg;
+	void (*func)(player_t *);
 	struct action_list_s *next;
 } action_list_t;
 
@@ -28,18 +32,8 @@ typedef struct pattern_s {
 } pattern_t;
 
 typedef struct {
-	void *entry_p;
-	void *return_p;
-} stack_pointer_t;
-
-typedef struct {
-	double2d_t pos;
-	double2d_t heading;
-} player_t;
-
-typedef struct {
-	player_t player;
-	pattern_t *actions;
+	player_t *player;
+	action_list_t *actions;
 } arg_t;
 
 #endif

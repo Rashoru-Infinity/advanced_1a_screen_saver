@@ -9,7 +9,48 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-void do_actions(void *arg)
+#include <world.h>
+#include <scr.h>
+#include <math.h>
+
+void ahead(player_t *player)
 {
-	
+	player->pos.x += 0.3 * cos(player->heading);
+	player->pos.y += 0.3 * sin(player->heading);
+}
+
+void back(player_t *player)
+{
+	player->pos.x -= 0.3 * cos(player->heading);
+	player->pos.y -= 0.3 * sin(player->heading);
+}
+
+void turnR(player_t *player)
+{
+	player->heading -= 10;
+	player->heading %= 360;
+}
+
+void turnL(player_t *player)
+{
+	player->heading += 10;
+	player->heading %= 360;
+}
+
+void do_actions(arg_t *arg)
+{
+	action_list_t *action;
+	action_list_t *entry_point;
+
+	entry_point = arg->actions;
+	while (1)
+	{
+		action = arg.actions;
+		while (action)
+		{
+			(*(action))(arg->player);
+			//render
+			action = action->next;
+		}
+	}
 }
