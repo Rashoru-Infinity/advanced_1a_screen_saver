@@ -28,14 +28,18 @@ typedef struct pattern_s {
 } pattern_t;
 
 typedef struct {
-	int loop_counter;
 	void *entry_p;
+	void *return_p;
 } stack_pointer_t;
 
 typedef struct {
 	double2d_t pos;
-	double ahead_remain;
-	double lturn_remain;
+	double2d_t heading;
 } player_t;
+
+typedef struct {
+	player_t player;
+	pattern_t *actions;
+} arg_t;
 
 #endif
