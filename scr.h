@@ -41,5 +41,6 @@ status_e check_map(char **map);
 char **read_map(const char *file_name);
 
 char **ft_split(char const *s, char c);
+void ft_split_clear(char **strs);
 
 #endif

@@ -35,6 +35,7 @@ typedef struct {
 	player_t *player;
 	char **map;
 	action_list_t *actions;
+	pattern_t *pattern_list;
 } arg_t;
 
 void ahead(player_t *player);

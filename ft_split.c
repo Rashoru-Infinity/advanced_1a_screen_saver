@@ -115,3 +115,15 @@ char			**ft_split(char const *s, char c)
 	}
 	return (strs);
 }
+
+void ft_split_clear(char **strs)
+{
+	char **head;
+
+	head = strs;
+	if (!strs)
+		return ;
+	while (*strs)
+		free(*(strs++));
+	free(head);
+}
