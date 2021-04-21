@@ -33,7 +33,14 @@ typedef struct pattern_s {
 
 typedef struct {
 	player_t *player;
+	char **map;
 	action_list_t *actions;
 } arg_t;
+
+void ahead(player_t *player);
+void back(player_t *player);
+void turnR(player_t *player);
+void turnL(player_t *player);
+void do_actions(arg_t *arg);
 
 #endif

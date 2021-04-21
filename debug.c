@@ -16,7 +16,7 @@
 int main(void)
 {
 	char **map;
-	if (!(map = set_map("sample.map")))
+	if (!(map = read_map("sample.map")))
 	{
 		printf("fail to set map\n");
 		exit(0);
