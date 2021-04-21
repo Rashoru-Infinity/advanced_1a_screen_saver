@@ -9,10 +9,10 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRCS	= extstr.c read_file.c debug.c set_map.c ft_split.c check_map.c list_clear.c
+SRCS	= extstr.c read_file.c debug.c set_map.c ft_split.c check_map.c list_clear.c do_actions.c 
 CC	= gcc
 INC	= -I.
-CFLAGS	= -Wall -Wextra -Werror -g $(INC)
+CFLAGS	= -Wall -Wextra -Werror -g -lm $(INC)
 NAME	= al19136.scr
 OBJS	= $(SRCS:.c=.o)
 RM	= rm -f

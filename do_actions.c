@@ -27,14 +27,14 @@ void back(player_t *player)
 
 void turnR(player_t *player)
 {
-	player->heading -= 10;
-	player->heading %= 360;
+	player->heading -= M_PI / 60;
+	player->heading = fmod(player->heading, M_PI);
 }
 
 void turnL(player_t *player)
 {
-	player->heading += 10;
-	player->heading %= 360;
+	player->heading += M_PI / 60;
+	player->heading = fmod(player->heading, M_PI);
 }
 
 void do_actions(arg_t *arg)
@@ -45,12 +45,13 @@ void do_actions(arg_t *arg)
 	entry_point = arg->actions;
 	while (1)
 	{
-		action = arg.actions;
+		action = arg->actions;
 		while (action)
 		{
-			(*(action))(arg->player);
+			(*(action->func))(arg->player);
 			//render
 			action = action->next;
 		}
+		action = entry_point;
 	}
 }

@@ -17,7 +17,7 @@
 
 typedef struct {
 	double2d_t pos;
-	double2d_t heading;
+	double heading;
 } player_t;
 
 typedef struct action_list_s {
