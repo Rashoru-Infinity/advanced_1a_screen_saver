@@ -34,14 +34,13 @@ typedef struct pattern_s {
 typedef struct {
 	player_t *player;
 	char **map;
-	action_list_t *actions;
 	pattern_t *pattern_list;
 } arg_t;
 
-void ahead(player_t *player);
-void back(player_t *player);
-void turnR(player_t *player);
-void turnL(player_t *player);
+void ahead(arg_t *arg);
+void back(arg_t *arg);
+void turnR(arg_t *arg);
+void turnL(arg_t *arg);
 void do_actions(arg_t *arg);
 
 #endif

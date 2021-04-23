@@ -12,46 +12,140 @@
 #include <world.h>
 #include <scr.h>
 #include <math.h>
+#include <two_dimensions.h>
+#include <string.h>
 
-void ahead(player_t *player)
+void ahead(arg_t *arg)
 {
-	player->pos.x += 0.3 * cos(player->heading);
-	player->pos.y += 0.3 * sin(player->heading);
+	//try to visit
+	double2d_t new_point;
+	//map index
+	int2d_t map_point;
+	int2d_t diag;
+	char **line;
+	size_t curr_y;
+
+	new_point.x = arg->player->pos.x + 0.3 * cos(arg->player->heading);
+	new_point.y = arg->player->pos.y + 0.3 * sin(arg->player->heading);
+	map_point.x = floor(new_point.x);
+	map_point.y = floor(new_point.y);
+	line = arg->map;
+	curr_y = 0;
+	while (line)
+	{
+		if (curr_y == (size_t)map_point.y)
+			break;
+		++line;
+		++curr_y;
+	}
+	if (curr_y == (size_t)map_point.y)
+	{
+		if (map_point.x >= 0 && strlen(*line) > (size_t)map_point.x)
+		{
+			if (arg->map[map_point.y][map_point.y] == 'X' || arg->map[map_point.y][map_point.x] == ' ')
+				return ;
+			if (fabs(floor(arg->player->pos.x) - new_point.x) > 1 && fabs(floor(arg->player->pos.y) - new_point.y) > 1)
+			{
+				if (fabs(arg->player->heading) <= M_PI / 2)
+					diag.x = (int)(arg->player->pos.x + 1);
+				else
+					diag.x = (int)(arg->player->pos.x - 1);
+				diag.y = new_point.y;
+				if (arg->map[diag.y][diag.x] == 'X' || arg->map[diag.y][diag.x] == ' ')
+					return ;
+				diag.x = (int)(arg->player->pos.x);
+				if (fabs(arg->player->heading) > 0)
+					diag.y = (int)(arg->player->pos.y + 1);
+				else
+					diag.y = (int)(arg->player->pos.y - 1);
+				if (arg->map[diag.y][diag.x] == 'X' || arg->map[diag.y][diag.x] == ' ')
+					return ;
+			}
+			arg->player->pos.x = new_point.x;
+			arg->player->pos.y = new_point.y;
+		}
+	}
 }
 
-void back(player_t *player)
+void back(arg_t *arg)
 {
-	player->pos.x -= 0.3 * cos(player->heading);
-	player->pos.y -= 0.3 * sin(player->heading);
+	//try to visit
+	double2d_t new_point;
+	//map index
+	int2d_t map_point;
+	int2d_t diag;
+	char **line;
+	size_t curr_y;
+
+	new_point.x = arg->player->pos.x - 0.3 * cos(arg->player->heading);
+	new_point.y = arg->player->pos.y - 0.3 * sin(arg->player->heading);
+	map_point.x = floor(new_point.x);
+	map_point.y = floor(new_point.y);
+	line = arg->map;
+	curr_y = 0;
+	while (line)
+	{
+		if (curr_y == (size_t)map_point.y)
+			break;
+		++line;
+	}
+	if (curr_y == (size_t)map_point.y)
+	{
+		if (map_point.x >= 0 && strlen(*line) > (size_t)map_point.x)
+		{
+			if (arg->map[map_point.y][map_point.y] == 'X' || arg->map[map_point.y][map_point.x] == ' ')
+				return ;
+			if (fabs(floor(arg->player->pos.x) - new_point.x) > 1 && fabs(floor(arg->player->pos.y) - new_point.y) > 1)
+			{
+				if (fabs(arg->player->heading) >= M_PI / 2)
+					diag.x = (int)(arg->player->pos.x + 1);
+				else
+					diag.x = (int)(arg->player->pos.x - 1);
+				diag.y = new_point.y;
+				if (arg->map[diag.y][diag.x] == 'X' || arg->map[diag.y][diag.x] == ' ')
+					return ;
+				diag.x = (int)(arg->player->pos.x);
+				if (fabs(arg->player->heading) < 0)
+					diag.y = (int)(arg->player->pos.y + 1);
+				else
+					diag.y = (int)(arg->player->pos.y - 1);
+				if (arg->map[diag.y][diag.x] == 'X' || arg->map[diag.y][diag.x] == ' ')
+					return ;
+			}
+			arg->player->pos.x = new_point.x;
+			arg->player->pos.y = new_point.y;
+		}
+	}
 }
 
-void turnR(player_t *player)
+void turnR(arg_t *arg)
 {
-	player->heading -= M_PI / 60;
-	player->heading = fmod(player->heading, M_PI);
+	arg->player->heading -= M_PI / 60;
+	arg->player->heading = fmod(arg->player->heading, M_PI);
 }
 
-void turnL(player_t *player)
+void turnL(arg_t *arg)
 {
-	player->heading += M_PI / 60;
-	player->heading = fmod(player->heading, M_PI);
+	arg->player->heading += M_PI / 60;
+	arg->player->heading = fmod(arg->player->heading, M_PI);
 }
 
 void do_actions(arg_t *arg)
 {
+	pattern_list_t *pattern;
 	action_list_t *action;
-	action_list_t *entry_point;
 
-	entry_point = arg->actions;
-	while (1)
+	pattern = arg->pattern_list;
+	while (!pattern)
 	{
-		action = arg->actions;
+		action = pattern->ptn;
 		while (action)
 		{
 			(*(action->func))(arg->player);
 			//render
 			action = action->next;
 		}
-		action = entry_point;
+		if (!pattern)
+			pattern = arg->pattern_list;
 	}
 }
