@@ -132,7 +132,7 @@ void turnL(arg_t *arg)
 
 void do_actions(arg_t *arg)
 {
-	pattern_list_t *pattern;
+	pattern_t *pattern;
 	action_list_t *action;
 
 	pattern = arg->pattern_list;

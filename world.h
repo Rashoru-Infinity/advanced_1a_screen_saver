@@ -37,6 +37,11 @@ typedef struct {
 	pattern_t *pattern_list;
 } arg_t;
 
+typedef struct {
+	char **map;
+	player_t *player;
+}	config_t;
+
 void ahead(arg_t *arg);
 void back(arg_t *arg);
 void turnR(arg_t *arg);

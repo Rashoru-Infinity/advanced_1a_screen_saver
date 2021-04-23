@@ -26,11 +26,6 @@ typedef struct {
 	size_t	curr_size;
 }		extstr_t;
 
-typedef struct {
-	char **map;
-	player_t *player;
-}		config_t;
-
 status_e extstr_init(extstr_t *str);
 status_e extstr_append(extstr_t *str, char *new_str, size_t len);
 
