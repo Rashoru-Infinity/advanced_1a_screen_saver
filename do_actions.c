@@ -15,8 +15,11 @@
 #include <two_dimensions.h>
 #include <string.h>
 
-void ahead(arg_t *arg)
+void ahead(void *ag)
 {
+	arg_t *arg;
+
+	arg = (arg_t *)ag;
 	//try to visit
 	double2d_t new_point;
 	//map index
@@ -67,8 +70,11 @@ void ahead(arg_t *arg)
 	}
 }
 
-void back(arg_t *arg)
+void back(void *ag)
 {
+	arg_t *arg;
+
+	arg = (arg_t *)ag;
 	//try to visit
 	double2d_t new_point;
 	//map index
@@ -118,14 +124,20 @@ void back(arg_t *arg)
 	}
 }
 
-void turnR(arg_t *arg)
+void turnR(void *ag)
 {
+	arg_t *arg;
+
+	arg = (arg_t *)ag;
 	arg->player->heading -= M_PI / 60;
 	arg->player->heading = fmod(arg->player->heading, M_PI);
 }
 
-void turnL(arg_t *arg)
+void turnL(void *ag)
 {
+	arg_t *arg;
+
+	arg = (arg_t *)ag;
 	arg->player->heading += M_PI / 60;
 	arg->player->heading = fmod(arg->player->heading, M_PI);
 }
@@ -135,17 +147,20 @@ void do_actions(arg_t *arg)
 	pattern_t *pattern;
 	action_list_t *action;
 
-	pattern = arg->pattern_list;
-	while (!pattern)
+	while (1)
 	{
-		action = pattern->ptn;
-		while (action)
+		for (size_t i = 0;i < arg->entry_point->size;++i)
 		{
-			(*(action->func))(arg->player);
-			//render
-			action = action->next;
+			pattern = arg->entry_point->contents[0];
+			action = pattern->ptn;
+			while (action)
+			{
+				(*(action->func))(arg->player);
+				//render
+				action = action->next;
+			}
+			if (!pattern)
+				break;
 		}
-		if (!pattern)
-			pattern = arg->pattern_list;
 	}
 }

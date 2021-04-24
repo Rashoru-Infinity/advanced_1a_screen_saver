@@ -14,7 +14,20 @@
 #include <string.h>
 #include <stdlib.h>
 
-static status_e set_map(arg_t *arg, const char *file_name)
+static char *skip_space(char *s)
+{
+	char *head;
+
+	head = s;
+	while (*s == ' ' || *s == '\t')
+	{
+		if (*(++s) == '\0')
+			return head;
+	}
+	return s;
+}
+
+static status_t set_map(arg_t *arg, const char *file_name)
 {
 	//skip space
 	while (*file_name == ' ')
@@ -30,71 +43,78 @@ static status_e set_map(arg_t *arg, const char *file_name)
 	return SUCCESS;
 }
 
-static status_e set_pattern(arg_t *arg, char *name, char ***lines)
+static pattern_t *get_ptn(t_array *ptn_list, char *name)
 {
-	pattern_t *pattern;
-	pattern_t *curr_ptn;
-	action_list_t *action;
-	char *line;
+	size_t index;
 
-	while (*name && *name == ' ')
-		++name;
-	if (!(pattern = calloc(sizeof(pattern_t))))
-		return FAIL;
-	if (!(pattern->name = strdup(name)))
+	index = 0;
+	while (index < ptn_list->size)
 	{
-		free(pattern)
+		if (strcmp(((pattern_t *)(ptn_list->contents[index]))->name, name) == 0)
+			return (pattern_t *)(ptn_list->contents[index]);
+	}
+	return NULL;
+}
+
+static status_t set_pattern(arg_t *arg, char *name_str, char ***lines, int entry)
+{
+	char *name;
+	pattern_t *ptn;
+	char *func;
+	action_list_t *action;
+	action_list_t *last;
+
+	while (*name_str && (*name_str == ' ' || *name_str == '\t'))
+		++name_str;
+	if (!*name_str)
+		return FAIL;
+	if (!(name = strdup(name_str)))
+		return FAIL;
+	if (!(ptn = calloc(1, sizeof(pattern_t))))
+	{
+		free(name);
 		return FAIL;
 	}
+	ptn->name = name;
+	if (arg->pattern_list->size == arg->pattern_list->real_size)
+		array_extend(arg->pattern_list);
+	if (!entry)
+		arg->pattern_list->contents[arg->pattern_list->size++] = ptn;
+	else
+		arg->entry_point->contents[arg->pattern_list->size++] = ptn;
 	(*lines)++;
-	while (*lines)
+	func = skip_space(**lines);
+	last = NULL;
+	while (strncmp(func, "exit", 5) != 0)
 	{
-		line = **lines;
-		while (*line || *line == ' ' || *line == '\t')
-			++line;
-		if (strncmp(line, "ahead", 6) == 0)
-		{
-			if (!(action = calloc(action_list_t)))
-			{
-				free(pattern);
-				return FAIL;
-			}
+		if (!(action = calloc(1, sizeof(action_list_t))))
+			return FAIL;
+		if (strncmp(func, "ahead", 6) == 0)
 			action->func = ahead;
-		}
-		else if (strncmp(line, "back", 5) == 0)
-		{
-			if ((!action = calloc(action_list_t)))
-			{
-				free(pattern);
-				return FAIL;
-			}
+		else if (strncmp(func, "back", 5) == 0)
 			action->func = back;
-		}
-		else if (strncmp(line, "turnR", 6) == 0)
-		{
-			if ((!action = calloc(action_list_t)))
-			{
-				free(pattern);
-				return FAIL;
-			}
+		else if (strncmp(func, "turnR", 6) == 0)
 			action->func = turnR;
-		}
-		else if (strncmp(line, "turnL", 6) == 0)
-		{
-			if ((!action = calloc(action_list_t)))
-			{
-				free(pattern);
-				return FAIL;
-			}
+		else if (strncmp(func, "turnL", 6) == 0)
 			action->func = turnL;
+		else if (get_ptn(arg->pattern_list, name))
+			memcpy(action, get_ptn(arg->pattern_list, name)->ptn, sizeof(action_list_t));
+		else
+			return FAIL;
+		if (ptn->ptn)
+		{
+			last = ptn->ptn;
+			while (last)
+			{
+				if (!last->next)
+					last->next = action;
+				last = last->next;
+			}
 		}
 		else
-		{
-			curr_ptn = arg->pattern_list;
-			if (copy_pattern() == FAIL)
-			
-		}
+			ptn->ptn = action;
 	}
+	return SUCCESS;
 }
 
 arg_t *set_config(char *content)
@@ -107,24 +127,53 @@ arg_t *set_config(char *content)
 
 	if (!content)
 		return NULL;
-	if (!(arg = calloc(sizeof(arg_t))))
+	if (!(arg = calloc(1, sizeof(arg_t))))
 		return NULL;
+	if (!(arg->entry_point = calloc(1, sizeof(t_array))))
+	{
+		free(arg);
+		return NULL;
+	}
+	if (!(arg->pattern_list = calloc(1, sizeof(t_array))))
+	{
+		free(arg->entry_point);
+		free(arg);
+		return NULL;
+	}
 	if (!(lines = ft_split(content, '\n')))
+	{
+		free(arg->entry_point);
+		free(arg->pattern_list);
+		free(arg);
+		return NULL;
+	}
+	if (array_init(arg->entry_point, NULL, 10) == FAIL)
+		return NULL;
+	if (array_init(arg->pattern_list, NULL, 10) == FAIL)
 		return NULL;
 	curr_line = lines;
 	while (*curr_line)
 	{
 		if (!(line_words = ft_split(*curr_line, ':')))
-			exit(1);
+		{
+			free(arg->entry_point);
+			free(arg->pattern_list);
+			free(arg);
+			ft_split_clear(lines);
+			return NULL;
+		}
 		curr_word = *line_words;
 		//set map file
-		if (strncmp("map", *curr_word, 4) == 0)
+		if (strncmp("map", curr_word, 4) == 0)
 		{
 			free(curr_word++);
-			if (set_map(arg, curr_word) == FAIL)
+			if (!*curr_word || set_map(arg, curr_word) == FAIL)
 			{
-				split_clear(lines);
-				split_clear(line_words);
+				free(arg->entry_point);
+				free(arg->pattern_list);
+				free(arg);
+				ft_split_clear(lines);
+				ft_split_clear(line_words);
 				return NULL;
 			}
 			curr_line++;
@@ -132,27 +181,46 @@ arg_t *set_config(char *content)
 			//check syntax error
 			if (curr_word)
 			{
-				split_clear(lines);
-				split_clear(line_words);
+				free(arg->entry_point);
+				free(arg->pattern_list);
+				free(arg);
+				ft_split_clear(lines);
+				ft_split_clear(line_words);
 				return NULL;
 			}
 		}
 		//set pattern
-		else if (strncmp("pattern", *curr_word, 8) == 0)
+		else if (strncmp("pattern", curr_word, 8) == 0)
 		{
 			free(curr_word++);
-			if (set_pattern() == FAIL)
+			if (set_pattern(arg, curr_word, &lines, 0) == FAIL)
 			{
-				split_clear(lines);
-				split_clear(line_words);
+				free(arg->entry_point);
+				free(arg->pattern_list);
+				free(arg);
+				ft_split_clear(lines);
+				ft_split_clear(line_words);
 				return NULL;
-			}	
+			}
+			free(curr_word);
 		}
 		//set entryPoint
 		else if (strncmp("entryPoint", curr_word, 11) == 0)
 		{
+			free(curr_word++);
+			if (set_pattern(arg, curr_word, &lines, 1) == FAIL)
+			{
+				free(arg->entry_point);
+				free(arg->pattern_list);
+				free(arg);
+				ft_split_clear(lines);
+				ft_split_clear(line_words);
+				return NULL;
+			}
+			free(curr_word);
 		}
-		++curr_line;
+		else
+			++curr_line;
 	}
 	return arg;
 }

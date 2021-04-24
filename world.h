@@ -14,6 +14,7 @@
 #include <scr.h>
 #include <stdlib.h>
 #include <two_dimensions.h>
+#include <vla.h>
 
 typedef struct {
 	double2d_t pos;
@@ -21,7 +22,7 @@ typedef struct {
 } player_t;
 
 typedef struct action_list_s {
-	void (*func)(player_t *);
+	void (*func)(void *);
 	struct action_list_s *next;
 } action_list_t;
 
@@ -34,18 +35,14 @@ typedef struct pattern_s {
 typedef struct {
 	player_t *player;
 	char **map;
-	pattern_t *pattern_list;
+	t_array *entry_point;
+	t_array *pattern_list;
 } arg_t;
 
-typedef struct {
-	char **map;
-	player_t *player;
-}	config_t;
-
-void ahead(arg_t *arg);
-void back(arg_t *arg);
-void turnR(arg_t *arg);
-void turnL(arg_t *arg);
+void ahead(void *arg);
+void back(void *arg);
+void turnR(void *arg);
+void turnL(void *arg);
 void do_actions(arg_t *arg);
 
 #endif

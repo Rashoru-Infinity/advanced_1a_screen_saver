@@ -15,7 +15,7 @@
 #include <two_dimensions.h>
 #include <stdio.h>
 
-static status_e check_size(char **map)
+static status_t check_size(char **map)
 {
 	char *p;
 	size_t height;
@@ -33,7 +33,7 @@ static status_e check_size(char **map)
 	return SUCCESS;
 }
 
-static status_e check_str(char **map)
+static status_t check_str(char **map)
 {
 	size_t offset;
 	char *p;
@@ -62,7 +62,7 @@ static status_e check_str(char **map)
 	return SUCCESS;
 }
 
-static status_e queue_insert(int2d_list_t **queue_last, int x, int y)
+static status_t queue_insert(int2d_list_t **queue_last, int x, int y)
 {
 	int2d_list_t *tmp;
 
@@ -76,7 +76,7 @@ static status_e queue_insert(int2d_list_t **queue_last, int x, int y)
 	return SUCCESS;
 }
 
-static status_e bfs_map(char **map, int **vst_stat, size_t map_height)
+static status_t bfs_map(char **map, int **vst_stat, size_t map_height)
 {
 	size_t curr_height;
 	char *s;
@@ -182,7 +182,7 @@ static status_e bfs_map(char **map, int **vst_stat, size_t map_height)
 	return SUCCESS;
 }
 
-static status_e check_closed(char **map)
+static status_t check_closed(char **map)
 {
 	int **vst_stat;	//remembers visit status on the map
 	char *s;
@@ -190,7 +190,7 @@ static status_e check_closed(char **map)
 	size_t offset;
 	size_t map_height;
 	size_t curr_height;
-	status_e result;
+	status_t result;
 
 	s = *map;
 	map_cpy = map;
@@ -255,7 +255,7 @@ static status_e check_closed(char **map)
 	return result;
 }
 
-status_e check_map(char **map)
+status_t check_map(char **map)
 {
 	if (!map)
 		return FAIL;

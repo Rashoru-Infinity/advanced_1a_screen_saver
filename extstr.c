@@ -14,7 +14,7 @@
 #include <string.h>
 #include <stdint.h>
 
-status_e extstr_init(extstr_t *str)
+status_t extstr_init(extstr_t *str)
 {
 	if (!str)
 		return FAIL;
@@ -25,7 +25,7 @@ status_e extstr_init(extstr_t *str)
 	return SUCCESS;
 }
 
-static status_e extstr_extend(extstr_t *str)
+static status_t extstr_extend(extstr_t *str)
 {
 	char *new_array;
 
@@ -40,7 +40,7 @@ static status_e extstr_extend(extstr_t *str)
 	return SUCCESS;
 }
 
-status_e extstr_append(extstr_t *str, char *new_str, size_t len)
+status_t extstr_append(extstr_t *str, char *new_str, size_t len)
 {
 	if (!new_str || !str)
 		return FAIL;

@@ -14,7 +14,7 @@
 #include <scr.h>
 #include <string.h>
 
-status_e read_file(const char *file_name, extstr_t *content)
+status_t read_file(const char *file_name, extstr_t *content)
 {
 	FILE *fp;
 	const size_t BUF_SIZE = 1024;

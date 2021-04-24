@@ -18,7 +18,7 @@ char *read_config(const char *file_name)
 
 	if (!file_name || extstr_init(&content) == FAIL)
 		return NULL;
-	if (read_file(file_name), &content == FAIL)
+	if (read_file(file_name, &content) == FAIL)
 	{
 		free(content.str);
 		return NULL;
