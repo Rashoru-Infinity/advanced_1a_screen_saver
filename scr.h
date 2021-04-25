@@ -34,4 +34,7 @@ char **read_map(const char *file_name);
 char **ft_split(char const *s, char c);
 void ft_split_clear(char **strs);
 
+char *read_config(const char *s);
+arg_t *set_config(char *lines);
+
 #endif

@@ -11,7 +11,6 @@
 
 #ifndef WORLD_H
 #define WORLD_H
-#include <scr.h>
 #include <stdlib.h>
 #include <two_dimensions.h>
 #include <vla.h>

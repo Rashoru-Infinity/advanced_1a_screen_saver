@@ -12,19 +12,25 @@
 #include <stdio.h>
 #include <scr.h>
 #include <stdlib.h>
+#include <status.h>
+#include <two_dimensions.h>
+#include <vla.h>
 
 int main(void)
 {
-	char **map;
-	if (!(map = read_map("sample.map")))
+	arg_t *arg;
+	char *lines;
+
+	if (!(lines = read_config("lang_model.conf")))
 	{
-		printf("fail to set map\n");
-		exit(0);
+		printf("fail to read file\n");
+		return 0;
 	}
-	if (check_map(map) == FAIL)
+	printf("%s\n", lines);
+	if (!(arg = set_config(lines)))
 	{
-		printf("invalid map\n");
-		exit(0);
+		printf("fail to set config\n");
+		return 0;
 	}
-	printf("no error in map file");
+	return 0;
 }
