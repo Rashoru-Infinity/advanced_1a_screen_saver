@@ -56,7 +56,7 @@ static pattern_t *get_ptn(t_array *ptn_list, char *name)
 	return NULL;
 }
 
-static status_t set_pattern(arg_t *arg, char *name_str, char ***lines, int entry)
+static status_t set_pattern(arg_t *arg, char *name_str, char ***lines)
 {
 	char *name;
 	pattern_t *ptn;
@@ -78,10 +78,7 @@ static status_t set_pattern(arg_t *arg, char *name_str, char ***lines, int entry
 	ptn->name = name;
 	if (arg->pattern_list->size == arg->pattern_list->real_size)
 		array_extend(arg->pattern_list);
-	if (!entry)
-		arg->pattern_list->contents[arg->pattern_list->size++] = ptn;
-	else
-		arg->entry_point->contents[arg->pattern_list->size++] = ptn;
+	arg->pattern_list->contents[arg->pattern_list->size++] = ptn;
 	(*lines)++;
 	func = skip_space(**lines);
 	last = NULL;
@@ -130,6 +127,59 @@ static status_t set_pattern(arg_t *arg, char *name_str, char ***lines, int entry
 		func = skip_space(**lines);
 	}
 	++(*lines);
+	return SUCCESS;
+}
+
+static status_t set_entry_point(arg_t *arg, char ***lines)
+{
+	char *func;
+	action_list_t *action;
+
+	while (1)
+	{
+		action = NULL;
+		++(*lines);
+		func = skip_space(**lines);
+		if (strncmp(func, "exit", 5) == 0)
+			break;
+		else if (strncmp(func, "ahead", 6) == 0)
+		{
+			if (!(action = calloc(1, sizeof(action_list_t))))
+				return FAIL;
+			action->func = ahead;
+		}
+		else if (strncmp(func, "back", 5) == 0)
+		{
+			if (!(action = calloc(1, sizeof(action_list_t))))
+				return FAIL;
+			action->func = back;
+		}
+		else if (strncmp(func, "turnR", 6) == 0)
+		{
+			if (!(action = calloc(1, sizeof(action_list_t))))
+				return FAIL;
+			action->func = turnR;
+		}
+		else if (strncmp(func, "turnL", 6) == 0)
+		{
+			if (!(action = calloc(1, sizeof(action_list_t))))
+				return FAIL;
+			action->func = turnL;
+		}
+		else
+		{
+			if (get_ptn(arg->pattern_list, func)->ptn)
+				arg->entry_point->contents[arg->entry_point->size++] = get_ptn(arg->pattern_list, func)->ptn;
+			else
+				return FAIL;
+		}
+		if (action)
+		{
+			if (arg->entry_point->size == arg->entry_point->real_size)
+				array_extend(arg->entry_point);
+			arg->entry_point->contents[arg->entry_point->size++] = action;
+		}
+	}
 	return SUCCESS;
 }
 
@@ -210,7 +260,7 @@ arg_t *set_config(char *content)
 		else if (strncmp("pattern", skip_space(*curr_word), 8) == 0)
 		{
 			free(*(curr_word++));
-			if (set_pattern(arg, *curr_word, &curr_line, 0) == FAIL)
+			if (set_pattern(arg, *curr_word, &curr_line) == FAIL)
 			{
 				free(arg->entry_point);
 				free(arg->pattern_list);
@@ -224,11 +274,8 @@ arg_t *set_config(char *content)
 		//set entryPoint
 		else if (strncmp("entryPoint", skip_space(*curr_word), 11) == 0)
 		{
-			free(*(curr_word++));
-			if (set_pattern(arg, *curr_word, &lines, 1) == FAIL)
+			if (set_entry_point(arg, &curr_line) == FAIL)
 			{
-				free(arg->entry_point);
-				free(arg->pattern_list);
 				free(arg);
 				ft_split_clear(lines);
 				ft_split_clear(line_words);
