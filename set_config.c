@@ -56,8 +56,8 @@ static status_t set_map(arg_t *arg, const char *file_name)
 			if (line[x] == 'N' || line[x] == 'S' || line[x] == 'W' || line[x] == 'E')
 			{
 				found = 1;
-				arg->player.pos.x = x;
-				arg->player.pos.y = y;
+				arg->player.pos.x = (double)x + 0.5;
+				arg->player.pos.y = (double)y + 0.5;
 				switch (line[x])
 				{
 				case 'N':
@@ -145,23 +145,23 @@ static status_t set_pattern(arg_t *arg, char *name_str, char ***lines)
 				if (get_ptn(arg->pattern_list, func)->ptn)
 					memcpy(action, get_ptn(arg->pattern_list, func)->ptn, sizeof(action_list_t));
 				else
+				{
+					free(action);
 					return FAIL;
+				}
 			}
 		}
 		else
+		{
+			free(action);
 			return FAIL;
+		}
 		if (ptn->ptn)
 		{
 			last = ptn->ptn;
-			while (last)
-			{
-				if (!last->next)
-				{
-					last->next = action;
-					break;
-				}
+			while (last->next)
 				last = last->next;
-			}
+			last->next = action;
 		}
 		else
 			ptn->ptn = action;
@@ -211,7 +211,11 @@ static status_t set_entry_point(arg_t *arg, char ***lines)
 		else
 		{
 			if (get_ptn(arg->pattern_list, func)->ptn)
+			{
+				if (arg->entry_point->size == arg->entry_point->real_size)
+					array_extend(arg->entry_point);
 				arg->entry_point->contents[arg->entry_point->size++] = get_ptn(arg->pattern_list, func)->ptn;
+			}
 			else
 				return FAIL;
 		}

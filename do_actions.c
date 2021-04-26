@@ -153,24 +153,35 @@ void turnL(void *ag)
 
 void do_actions(arg_t *arg)
 {
-	pattern_t *pattern;
 	action_list_t *action;
 
+	/*
+	printf("ahead:(0X%p)\n", ahead);
+	printf("back:(0X%p)\n", back);
+	printf("turnR:(0X%p)\n", turnR);
+	printf("turnL:(0X%p)\n", turnL);
+	*/
 	while (1)
 	{
 		for (size_t i = 0;i < arg->entry_point->size;++i)
 		{
-			pattern = arg->entry_point->contents[0];
-			action = pattern->ptn;
+			action = ((action_list_t *)(arg->entry_point->contents[i]));
 			while (action)
 			{
 				(*(action->func))(arg);
+				if (action->func == ahead)
+					printf("ahead:");
+				if (action->func == back)
+					printf("back:");
+				if (action->func == turnR)
+					printf("turnR:");
+				if (action->func == turnL)
+					printf("turnL:");
+				printf("(0X%p)\n", action->func);
 				//render
 				action = action->next;
-				printf("position: (%f, %f), heading: %f\n", arg->player.pos.x, arg->player.pos.y, arg->player.heading);
+				//printf("position: (%f, %f), heading: %f\n", arg->player.pos.x, arg->player.pos.y, arg->player.heading);
 			}
-			if (!pattern)
-				break;
 		}
 	}
 }
