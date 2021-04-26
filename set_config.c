@@ -14,7 +14,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
-#include <stdio.h>
 
 static char *skip_space(char *s)
 {
@@ -59,7 +58,7 @@ static status_t set_map(arg_t *arg, const char *file_name)
 				found = 1;
 				arg->player.pos.x = x;
 				arg->player.pos.y = y;
-				switch (*line)
+				switch (line[x])
 				{
 				case 'N':
 					arg->player.heading = -M_PI / 2;

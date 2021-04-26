@@ -131,7 +131,11 @@ void turnR(void *ag)
 
 	arg = (arg_t *)ag;
 	arg->player.heading -= M_PI / 60;
-	arg->player.heading = fmod(arg->player.heading, M_PI);
+	arg->player.heading = fmod(arg->player.heading, 2 * M_PI);
+	if (arg->player.heading > M_PI)
+		arg->player.heading -= 2 * M_PI;
+	if (arg->player.heading < -M_PI)
+		arg->player.heading += 2 * M_PI;
 }
 
 void turnL(void *ag)
@@ -140,7 +144,11 @@ void turnL(void *ag)
 
 	arg = (arg_t *)ag;
 	arg->player.heading += M_PI / 60;
-	arg->player.heading = fmod(arg->player.heading, M_PI);
+	arg->player.heading = fmod(arg->player.heading, 2 * M_PI);
+	if (arg->player.heading > M_PI)
+		arg->player.heading -= 2 * M_PI;
+	if (arg->player.heading < -M_PI)
+		arg->player.heading += 2 * M_PI;
 }
 
 void do_actions(arg_t *arg)

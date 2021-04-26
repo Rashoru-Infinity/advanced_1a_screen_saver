@@ -32,7 +32,7 @@ int main(void)
 		printf("fail to set config\n");
 		return 0;
 	}
-	printf("success\n");
+	printf("success in configuring\n");
 	do_actions(arg);
 	return 0;
 }
