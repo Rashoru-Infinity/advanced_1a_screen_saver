@@ -33,5 +33,6 @@ int main(void)
 		return 0;
 	}
 	printf("success\n");
+	do_actions(arg);
 	return 0;
 }

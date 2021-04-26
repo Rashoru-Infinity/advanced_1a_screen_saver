@@ -13,6 +13,7 @@
 #include <world.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 #include <stdio.h>
 
 static char *skip_space(char *s)
@@ -30,14 +31,56 @@ static char *skip_space(char *s)
 
 static status_t set_map(arg_t *arg, const char *file_name)
 {
-	//skip space
+	size_t x;
+	size_t y;
+	int found;
+	char **lines;
+	char *line;
+
+	found = 0;
 	if (!(arg->map = read_map(skip_space((char *)file_name))))
 		return FAIL;
 	if (check_map(arg->map) == FAIL)
 	{
-		free(arg->map);
+		ft_split_clear(arg->map);
 		arg->map = NULL;
 		return FAIL;
+	}
+	lines = arg->map;
+	y = 0;
+	while (lines && !found)
+	{
+		x = 0;
+		line = *lines;
+		while (line[x])
+		{
+			if (line[x] == 'N' || line[x] == 'S' || line[x] == 'W' || line[x] == 'E')
+			{
+				found = 1;
+				arg->player.pos.x = x;
+				arg->player.pos.y = y;
+				switch (*line)
+				{
+				case 'N':
+					arg->player.heading = -M_PI / 2;
+					break;
+				case 'S':
+					arg->player.heading = M_PI / 2;
+					break;
+				case 'W':
+					arg->player.heading = M_PI;
+					break;
+				case 'E':
+					arg->player.heading = 0;
+					break;
+				default:
+					break;
+				}
+			}
+			++x;
+		}
+		++y;
+		line = *(++lines);
 	}
 	return SUCCESS;
 }

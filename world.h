@@ -32,7 +32,7 @@ typedef struct pattern_s {
 } pattern_t;
 
 typedef struct {
-	player_t *player;
+	player_t player;
 	char **map;
 	t_array *entry_point;
 	t_array *pattern_list;

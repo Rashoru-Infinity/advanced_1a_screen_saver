@@ -14,6 +14,7 @@
 #include <math.h>
 #include <two_dimensions.h>
 #include <string.h>
+#include <stdio.h>
 
 void ahead(void *ag)
 {
@@ -28,8 +29,8 @@ void ahead(void *ag)
 	char **line;
 	size_t curr_y;
 
-	new_point.x = arg->player->pos.x + 0.3 * cos(arg->player->heading);
-	new_point.y = arg->player->pos.y + 0.3 * sin(arg->player->heading);
+	new_point.x = arg->player.pos.x + 0.3 * cos(arg->player.heading);
+	new_point.y = arg->player.pos.y + 0.3 * sin(arg->player.heading);
 	map_point.x = floor(new_point.x);
 	map_point.y = floor(new_point.y);
 	line = arg->map;
@@ -47,25 +48,25 @@ void ahead(void *ag)
 		{
 			if (arg->map[map_point.y][map_point.y] == 'X' || arg->map[map_point.y][map_point.x] == ' ')
 				return ;
-			if (fabs(floor(arg->player->pos.x) - new_point.x) > 1 && fabs(floor(arg->player->pos.y) - new_point.y) > 1)
+			if (fabs(floor(arg->player.pos.x) - new_point.x) > 1 && fabs(floor(arg->player.pos.y) - new_point.y) > 1)
 			{
-				if (fabs(arg->player->heading) <= M_PI / 2)
-					diag.x = (int)(arg->player->pos.x + 1);
+				if (fabs(arg->player.heading) <= M_PI / 2)
+					diag.x = (int)(arg->player.pos.x + 1);
 				else
-					diag.x = (int)(arg->player->pos.x - 1);
+					diag.x = (int)(arg->player.pos.x - 1);
 				diag.y = new_point.y;
 				if (arg->map[diag.y][diag.x] == 'X' || arg->map[diag.y][diag.x] == ' ')
 					return ;
-				diag.x = (int)(arg->player->pos.x);
-				if (fabs(arg->player->heading) > 0)
-					diag.y = (int)(arg->player->pos.y + 1);
+				diag.x = (int)(arg->player.pos.x);
+				if (fabs(arg->player.heading) > 0)
+					diag.y = (int)(arg->player.pos.y + 1);
 				else
-					diag.y = (int)(arg->player->pos.y - 1);
+					diag.y = (int)(arg->player.pos.y - 1);
 				if (arg->map[diag.y][diag.x] == 'X' || arg->map[diag.y][diag.x] == ' ')
 					return ;
 			}
-			arg->player->pos.x = new_point.x;
-			arg->player->pos.y = new_point.y;
+			arg->player.pos.x = new_point.x;
+			arg->player.pos.y = new_point.y;
 		}
 	}
 }
@@ -83,8 +84,8 @@ void back(void *ag)
 	char **line;
 	size_t curr_y;
 
-	new_point.x = arg->player->pos.x - 0.3 * cos(arg->player->heading);
-	new_point.y = arg->player->pos.y - 0.3 * sin(arg->player->heading);
+	new_point.x = arg->player.pos.x - 0.3 * cos(arg->player.heading);
+	new_point.y = arg->player.pos.y - 0.3 * sin(arg->player.heading);
 	map_point.x = floor(new_point.x);
 	map_point.y = floor(new_point.y);
 	line = arg->map;
@@ -101,25 +102,25 @@ void back(void *ag)
 		{
 			if (arg->map[map_point.y][map_point.y] == 'X' || arg->map[map_point.y][map_point.x] == ' ')
 				return ;
-			if (fabs(floor(arg->player->pos.x) - new_point.x) > 1 && fabs(floor(arg->player->pos.y) - new_point.y) > 1)
+			if (fabs(floor(arg->player.pos.x) - new_point.x) > 1 && fabs(floor(arg->player.pos.y) - new_point.y) > 1)
 			{
-				if (fabs(arg->player->heading) >= M_PI / 2)
-					diag.x = (int)(arg->player->pos.x + 1);
+				if (fabs(arg->player.heading) >= M_PI / 2)
+					diag.x = (int)(arg->player.pos.x + 1);
 				else
-					diag.x = (int)(arg->player->pos.x - 1);
+					diag.x = (int)(arg->player.pos.x - 1);
 				diag.y = new_point.y;
 				if (arg->map[diag.y][diag.x] == 'X' || arg->map[diag.y][diag.x] == ' ')
 					return ;
-				diag.x = (int)(arg->player->pos.x);
-				if (fabs(arg->player->heading) < 0)
-					diag.y = (int)(arg->player->pos.y + 1);
+				diag.x = (int)(arg->player.pos.x);
+				if (fabs(arg->player.heading) < 0)
+					diag.y = (int)(arg->player.pos.y + 1);
 				else
-					diag.y = (int)(arg->player->pos.y - 1);
+					diag.y = (int)(arg->player.pos.y - 1);
 				if (arg->map[diag.y][diag.x] == 'X' || arg->map[diag.y][diag.x] == ' ')
 					return ;
 			}
-			arg->player->pos.x = new_point.x;
-			arg->player->pos.y = new_point.y;
+			arg->player.pos.x = new_point.x;
+			arg->player.pos.y = new_point.y;
 		}
 	}
 }
@@ -129,8 +130,8 @@ void turnR(void *ag)
 	arg_t *arg;
 
 	arg = (arg_t *)ag;
-	arg->player->heading -= M_PI / 60;
-	arg->player->heading = fmod(arg->player->heading, M_PI);
+	arg->player.heading -= M_PI / 60;
+	arg->player.heading = fmod(arg->player.heading, M_PI);
 }
 
 void turnL(void *ag)
@@ -138,8 +139,8 @@ void turnL(void *ag)
 	arg_t *arg;
 
 	arg = (arg_t *)ag;
-	arg->player->heading += M_PI / 60;
-	arg->player->heading = fmod(arg->player->heading, M_PI);
+	arg->player.heading += M_PI / 60;
+	arg->player.heading = fmod(arg->player.heading, M_PI);
 }
 
 void do_actions(arg_t *arg)
@@ -155,9 +156,10 @@ void do_actions(arg_t *arg)
 			action = pattern->ptn;
 			while (action)
 			{
-				(*(action->func))(arg->player);
+				(*(action->func))(arg);
 				//render
 				action = action->next;
+				printf("position: (%f, %f), heading: %f\n", arg->player.pos.x, arg->player.pos.y, arg->player.heading);
 			}
 			if (!pattern)
 				break;
