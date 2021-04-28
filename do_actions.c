@@ -95,6 +95,7 @@ void back(void *ag)
 		if (curr_y == (size_t)map_point.y)
 			break;
 		++line;
+		++curr_y;
 	}
 	if (curr_y == (size_t)map_point.y)
 	{
@@ -151,6 +152,12 @@ void turnL(void *ag)
 		arg->player.heading += 2 * M_PI;
 }
 
+void exit_func(void *arg)
+{
+	(void)arg;
+	return;
+}
+
 void do_actions(arg_t *arg)
 {
 	action_list_t *action;
@@ -160,6 +167,7 @@ void do_actions(arg_t *arg)
 	printf("back:(0X%p)\n", back);
 	printf("turnR:(0X%p)\n", turnR);
 	printf("turnL:(0X%p)\n", turnL);
+	printf("exit:(0X%p)\n", exit_func);
 	*/
 	while (1)
 	{
@@ -171,12 +179,14 @@ void do_actions(arg_t *arg)
 				(*(action->func))(arg);
 				if (action->func == ahead)
 					printf("ahead:");
-				if (action->func == back)
+				else if (action->func == back)
 					printf("back:");
-				if (action->func == turnR)
+				else if (action->func == turnR)
 					printf("turnR:");
-				if (action->func == turnL)
+				else if (action->func == turnL)
 					printf("turnL:");
+				else if (action->func == exit_func)
+					printf("exit:");
 				printf("(0X%p)\n", action->func);
 				//render
 				action = action->next;

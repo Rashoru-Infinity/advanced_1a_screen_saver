@@ -121,11 +121,11 @@ static status_t set_pattern(arg_t *arg, char *name_str, char ***lines)
 	if (arg->pattern_list->size == arg->pattern_list->real_size)
 		array_extend(arg->pattern_list);
 	arg->pattern_list->contents[arg->pattern_list->size++] = ptn;
-	(*lines)++;
-	func = skip_space(**lines);
 	last = NULL;
-	while (strncmp(func, "exit", 5) != 0)
+	while (1)
 	{
+		++(*lines);
+		func = skip_space(**lines);
 		if (!(action = calloc(1, sizeof(action_list_t))))
 			return FAIL;
 		if (strncmp(func, "ahead", 6) == 0)
@@ -136,13 +136,15 @@ static status_t set_pattern(arg_t *arg, char *name_str, char ***lines)
 			action->func = turnR;
 		else if (strncmp(func, "turnL", 6) == 0)
 			action->func = turnL;
+		else if (strncmp(func, "exit", 5) == 0)
+			action->func = exit_func;
 		else if (get_ptn(arg->pattern_list, func))
 		{
 			if (strncmp(func, name, strlen(name) + 1))
 				memcpy(action, get_ptn(arg->pattern_list, func)->ptn, sizeof(action_list_t));
 			else
 			{
-				if (get_ptn(arg->pattern_list, func)->ptn)
+				if (get_ptn(arg->pattern_list, func) && get_ptn(arg->pattern_list, func)->ptn)
 					memcpy(action, get_ptn(arg->pattern_list, func)->ptn, sizeof(action_list_t));
 				else
 				{
@@ -165,8 +167,8 @@ static status_t set_pattern(arg_t *arg, char *name_str, char ***lines)
 		}
 		else
 			ptn->ptn = action;
-		++(*lines);
-		func = skip_space(**lines);
+		if (strncmp(func, "exit", 5) == 0)
+			break;
 	}
 	++(*lines);
 	return SUCCESS;
@@ -182,9 +184,7 @@ static status_t set_entry_point(arg_t *arg, char ***lines)
 		action = NULL;
 		++(*lines);
 		func = skip_space(**lines);
-		if (strncmp(func, "exit", 5) == 0)
-			break;
-		else if (strncmp(func, "ahead", 6) == 0)
+		if (strncmp(func, "ahead", 6) == 0)
 		{
 			if (!(action = calloc(1, sizeof(action_list_t))))
 				return FAIL;
@@ -208,9 +208,15 @@ static status_t set_entry_point(arg_t *arg, char ***lines)
 				return FAIL;
 			action->func = turnL;
 		}
+		else if (strncmp(func, "exit", 5) == 0)
+		{
+			if (!(action = calloc(1, sizeof(action_list_t))))
+				return FAIL;
+			action->func = exit_func;
+		}
 		else
 		{
-			if (get_ptn(arg->pattern_list, func)->ptn)
+			if (get_ptn(arg->pattern_list, func) && get_ptn(arg->pattern_list, func)->ptn)
 			{
 				if (arg->entry_point->size == arg->entry_point->real_size)
 					array_extend(arg->entry_point);
@@ -225,6 +231,8 @@ static status_t set_entry_point(arg_t *arg, char ***lines)
 				array_extend(arg->entry_point);
 			arg->entry_point->contents[arg->entry_point->size++] = action;
 		}
+		if (strncmp(func, "exit", 5) == 0)
+			break;
 	}
 	return SUCCESS;
 }

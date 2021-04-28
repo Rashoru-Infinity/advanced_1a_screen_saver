@@ -42,6 +42,7 @@ void ahead(void *arg);
 void back(void *arg);
 void turnR(void *arg);
 void turnL(void *arg);
+void exit_func(void *arg);
 void do_actions(arg_t *arg);
 
 #endif
