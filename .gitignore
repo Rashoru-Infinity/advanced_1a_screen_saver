@@ -6,3 +6,4 @@ read_test.c
 *.o
 *.scr
 *~
+~$*
