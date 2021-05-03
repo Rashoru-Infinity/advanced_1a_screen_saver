@@ -18,13 +18,11 @@
 #include <world.h>
 #include <two_dimensions.h>
 
-HDC hDC;
-int2d_t scr_size;
-
-arg_t *get_arg(const char *file_name)
+arg_t *get_arg(const char *file_name, HWND hWnd)
 {
 	arg_t *arg;
 	char *lines;
+	RECT rc;
 
 	if (!(lines = read_config(file_name)))
 	{
@@ -37,41 +35,57 @@ arg_t *get_arg(const char *file_name)
 		free(lines);
 		return NULL;
 	}
+	if (!(arg->hdc = GetDC(hWnd)))
+		return NULL;
+	if (!(GetClientRect(hWnd, &rc)))
+		return NULL;
+	arg->scr_size.x = rc.right - rc.left;
+	arg->scr_size.y = rc.bottom - rc.top;
 	printf("%s\n", lines);
 	free(lines);
-	printf("success in configureing.\n");
+	printf("success in configuring.\n");
 	return arg;
 }
 
-BOOL APIENTRY RegisterDialogClasses(HANDLE hInst)
-{
-	return TRUE;
-}
-
-LRESULT APIENTRY ScreenSaverProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT WINAPI ScreenSaverProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	static HANDLE render_th;
 	static arg_t *arg;
-	RECT rc;
 
-	switch(msg)
+	switch(uMsg)
 	{
 	case WM_CREATE:
-		if (!(arg = get_arg("lang_model.conf")))
+		if (!(arg = get_arg("lang_model.conf", hWnd)))
 			exit(0);
-		if (!(hDC = GetDC(hWnd)))
-			exit(0);
-		if (!(GetClientRect(hWnd, &rc)))
-			exit(0);
-		scr_size.x = rc.right - rc.left;
-		scr_size.y = rc.bottom - rc.top;
 		if (!(render_th = (HANDLE)_beginthreadex(NULL, 0, do_actions, arg, 0, NULL)))
 			exit(0);
 		break;
 	case WM_ERASEBKGND:
 		return TRUE;
 	case WM_DESTROY:
-		
-
+		arg->end = true;
+		if (WaitForSingleObject(render_th, INFINITE) == (DWORD)0xffffffff)
+			exit(0);
+		CloseHandle(render_th);
+		PostQuitMessage(0);
+		return FALSE;
+	default:
+		break;
+	}
 	return DefScreenSaverProc(hWnd, uMsg, wParam, lParam);
+}
+
+BOOL WINAPI ScreenSaverConfigureDialog(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	(void)hDlg;
+	(void)msg;
+	(void)wParam;
+	(void)lParam;
+	return TRUE;
+}
+
+BOOL WINAPI RegisterDialogClasses(HANDLE hInst)
+{
+	(void)hInst;
+	return TRUE;
 }

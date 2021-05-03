@@ -11,6 +11,7 @@
 
 #ifndef SCR_H
 #define SCR_H
+#define _USE_MATH_DEFINES
 #include <BaseTsd.h>
 #include <stddef.h>
 #include <world.h>

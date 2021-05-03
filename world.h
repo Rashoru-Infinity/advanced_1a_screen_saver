@@ -15,6 +15,7 @@
 #include <two_dimensions.h>
 #include <vla.h>
 #include <stdbool.h>
+#include <windows.h>
 
 typedef struct {
 	double2d_t pos;
@@ -37,7 +38,10 @@ typedef struct {
 	char **map;
 	t_array *entry_point;
 	t_array *pattern_list;
-	bool scr_end;
+	bool end;
+	HDC hdc;
+	HGLRC hrc;
+	int2d_t scr_size;
 } arg_t;
 
 void ahead(void *arg);
@@ -45,6 +49,6 @@ void back(void *arg);
 void turnR(void *arg);
 void turnL(void *arg);
 void exit_func(void *arg);
-void do_actions(arg_t *arg);
+unsigned __stdcall do_actions(void *arg);
 
 #endif

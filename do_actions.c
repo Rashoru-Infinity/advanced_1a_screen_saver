@@ -58,7 +58,7 @@ void ahead(void *ag)
 				if (arg->map[diag.y][diag.x] == 'X' || arg->map[diag.y][diag.x] == ' ')
 					return ;
 				diag.x = (int)(arg->player.pos.x);
-				if (fabs(arg->player.heading) > 0)
+				if (arg->player.heading > 0)
 					diag.y = (int)(arg->player.pos.y + 1);
 				else
 					diag.y = (int)(arg->player.pos.y - 1);
@@ -158,10 +158,12 @@ void exit_func(void *arg)
 	return;
 }
 
-void do_actions(arg_t *arg)
+unsigned __stdcall do_actions(void *ag)
 {
 	action_list_t *action;
+	arg_t *arg;
 
+	arg = (arg_t *)ag;
 	/*
 	printf("ahead:(0X%p)\n", ahead);
 	printf("back:(0X%p)\n", back);
@@ -194,4 +196,5 @@ void do_actions(arg_t *arg)
 			}
 		}
 	}
+	return 0;
 }

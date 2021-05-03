@@ -15,6 +15,21 @@
 #include <stdlib.h>
 #include <math.h>
 
+/*
+static char *my_strdup(char *s)
+{
+	char *dup;
+
+	if (!s)
+		return NULL;
+	if (!(dup = malloc(strlen(s) + 1)))
+		return NULL;
+	strcpy(dup, s);
+	dup[strlen(s)] = '\0';
+	return dup;
+}
+*/
+
 static char *skip_space(char *s)
 {
 	char *head;
