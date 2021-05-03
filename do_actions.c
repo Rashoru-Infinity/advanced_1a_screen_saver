@@ -169,7 +169,7 @@ void do_actions(arg_t *arg)
 	printf("turnL:(0X%p)\n", turnL);
 	printf("exit:(0X%p)\n", exit_func);
 	*/
-	while (1)
+	while (!arg->end)
 	{
 		for (size_t i = 0;i < arg->entry_point->size;++i)
 		{

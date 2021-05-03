@@ -249,6 +249,7 @@ arg_t *set_config(char *content)
 		return NULL;
 	if (!(arg = calloc(1, sizeof(arg_t))))
 		return NULL;
+	arg->end = false;
 	if (!(arg->entry_point = calloc(1, sizeof(t_array))))
 	{
 		free(arg);
