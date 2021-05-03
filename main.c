@@ -18,6 +18,9 @@
 #include <world.h>
 #include <two_dimensions.h>
 
+static HANDLE draw_th;
+
+
 BOOL RegisterDialogClasses(HANDLE hInst)
 {
 	return TRUE;

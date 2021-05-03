@@ -187,7 +187,7 @@ void do_actions(arg_t *arg)
 					printf("turnL:");
 				else if (action->func == exit_func)
 					printf("exit:");
-				printf("(0X%p)\n", action->func);
+				printf("(0x%x)\n", (size_t)(action->func));
 				//render
 				action = action->next;
 				//printf("position: (%f, %f), heading: %f\n", arg->player.pos.x, arg->player.pos.y, arg->player.heading);
