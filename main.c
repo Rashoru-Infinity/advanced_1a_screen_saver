@@ -41,6 +41,8 @@ arg_t *get_arg(const char *file_name, HWND hWnd)
 		return NULL;
 	arg->scr_size.x = rc.right - rc.left;
 	arg->scr_size.y = rc.bottom - rc.top;
+	printf("%u\n", arg->scr_size.x);
+	arg->hWnd = hWnd;
 	printf("%s\n", lines);
 	free(lines);
 	printf("success in configuring.\n");
@@ -67,6 +69,7 @@ LRESULT WINAPI ScreenSaverProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 		if (WaitForSingleObject(render_th, INFINITE) == (DWORD)0xffffffff)
 			exit(0);
 		CloseHandle(render_th);
+		disable_gl(arg->hWnd, &(arg->hdc), &(arg->hrc));
 		PostQuitMessage(0);
 		return FALSE;
 	default:

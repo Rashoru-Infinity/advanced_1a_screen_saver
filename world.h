@@ -41,6 +41,7 @@ typedef struct {
 	bool end;
 	HDC hdc;
 	HGLRC hrc;
+	HWND hWnd;
 	int2d_t scr_size;
 } arg_t;
 

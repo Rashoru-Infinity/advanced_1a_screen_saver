@@ -15,6 +15,7 @@
 #include <two_dimensions.h>
 #include <string.h>
 #include <stdio.h>
+#include <gl/gl.h>
 
 void ahead(void *ag)
 {
@@ -164,13 +165,17 @@ unsigned __stdcall do_actions(void *ag)
 	arg_t *arg;
 
 	arg = (arg_t *)ag;
-	/*
-	printf("ahead:(0X%p)\n", ahead);
-	printf("back:(0X%p)\n", back);
-	printf("turnR:(0X%p)\n", turnR);
-	printf("turnL:(0X%p)\n", turnL);
-	printf("exit:(0X%p)\n", exit_func);
-	*/
+	enable_gl(&(arg->hdc), &(arg->hrc));
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glOrtho(-50.0 * arg->scr_size.x / arg->scr_size.y, 50.0 * arg->scr_size.x / arg->scr_size.y, -50.0, 50.0, -50.0, 50.0);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glClearColor(0.1f, 0.2f, 0.3f, 0.0f);
+	glColor3f(0.9, 0.8, 0.7);
+	glViewport(0, 0, arg->scr_size.x, arg->scr_size.y);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glFlush();
 	while (!arg->end)
 	{
 		for (size_t i = 0;i < arg->entry_point->size;++i)

@@ -15,7 +15,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-/*
 static char *my_strdup(char *s)
 {
 	char *dup;
@@ -28,7 +27,6 @@ static char *my_strdup(char *s)
 	dup[strlen(s)] = '\0';
 	return dup;
 }
-*/
 
 static char *skip_space(char *s)
 {
@@ -125,7 +123,7 @@ static status_t set_pattern(arg_t *arg, char *name_str, char ***lines)
 		++name_str;
 	if (!*name_str)
 		return FAIL;
-	if (!(name = strdup(name_str)))
+	if (!(name = my_strdup(name_str)))
 		return FAIL;
 	if (!(ptn = calloc(1, sizeof(pattern_t))))
 	{
