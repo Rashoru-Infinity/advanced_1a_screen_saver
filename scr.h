@@ -12,6 +12,7 @@
 #ifndef SCR_H
 #define SCR_H
 #define _USE_MATH_DEFINES
+#define _GNU_SOURCE
 #include <BaseTsd.h>
 #include <stddef.h>
 #include <world.h>
@@ -40,5 +41,7 @@ char *read_config(const char *s);
 arg_t *set_config(char *lines);
 void enable_gl(HDC *hdc, HGLRC *hrc);
 void disable_gl(HWND hWnd, HDC *hdc, HGLRC *hrc);
+void render(arg_t *arg);
+double get_min_rad(double rad);
 
 #endif

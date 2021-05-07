@@ -9,6 +9,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <windows.h>
 #include <world.h>
 #include <scr.h>
 #include <math.h>
@@ -132,7 +133,7 @@ void turnR(void *ag)
 	arg_t *arg;
 
 	arg = (arg_t *)ag;
-	arg->player.heading -= M_PI / 60;
+	arg->player.heading += M_PI / 60;
 	arg->player.heading = fmod(arg->player.heading, 2 * M_PI);
 	if (arg->player.heading > M_PI)
 		arg->player.heading -= 2 * M_PI;
@@ -145,7 +146,7 @@ void turnL(void *ag)
 	arg_t *arg;
 
 	arg = (arg_t *)ag;
-	arg->player.heading += M_PI / 60;
+	arg->player.heading -= M_PI / 60;
 	arg->player.heading = fmod(arg->player.heading, 2 * M_PI);
 	if (arg->player.heading > M_PI)
 		arg->player.heading -= 2 * M_PI;
@@ -176,19 +177,22 @@ unsigned __stdcall do_actions(void *ag)
 	glViewport(0, 0, arg->scr_size.x, arg->scr_size.y);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(0.4, 1.0, 1.0);
-	glBegin(GL_LINES);
-		glVertex2f(arg->scr_size.x / 2, 0);
-		glVertex2f(arg->scr_size.x / 2, arg->scr_size.y);
-	glEnd();
-	SwapBuffers(arg->hdc);
 	while (!arg->end)
 	{
 		for (size_t i = 0;i < arg->entry_point->size;++i)
 		{
+			if (arg->end)
+				break;
 			action = ((action_list_t *)(arg->entry_point->contents[i]));
 			while (action)
 			{
+				if (arg->end)
+					break;
+				render(arg);
+				if (action->func != exit_func)
+					Sleep(1000);
 				(*(action->func))(arg);
+				/*
 				if (action->func == ahead)
 					printf("ahead:");
 				else if (action->func == back)
@@ -200,9 +204,8 @@ unsigned __stdcall do_actions(void *ag)
 				else if (action->func == exit_func)
 					printf("exit:");
 				printf("(0x%x)\n", (size_t)(action->func));
-				//render
+				*/
 				action = action->next;
-				//printf("position: (%f, %f), heading: %f\n", arg->player.pos.x, arg->player.pos.y, arg->player.heading);
 			}
 		}
 	}

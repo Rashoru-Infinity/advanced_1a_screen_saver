@@ -41,11 +41,11 @@ arg_t *get_arg(const char *file_name, HWND hWnd)
 		return NULL;
 	arg->scr_size.x = rc.right - rc.left;
 	arg->scr_size.y = rc.bottom - rc.top;
-	printf("%u\n", arg->scr_size.x);
+	//printf("%u\n", arg->scr_size.x);
 	arg->hWnd = hWnd;
-	printf("%s\n", lines);
+	//printf("%s\n", lines);
 	free(lines);
-	printf("success in configuring.\n");
+	//printf("success in configuring.\n");
 	return arg;
 }
 
