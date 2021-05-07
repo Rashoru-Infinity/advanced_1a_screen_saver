@@ -189,9 +189,10 @@ unsigned __stdcall do_actions(void *ag)
 				if (arg->end)
 					break;
 				render(arg);
-				if (action->func != exit_func)
+				if (action->func && action->func != exit_func)
 					Sleep(1000);
-				(*(action->func))(arg);
+				if (action->func)
+					(*(action->func))(arg);
 				if (action->func == ahead)
 					printf("ahead:");
 				else if (action->func == back)
