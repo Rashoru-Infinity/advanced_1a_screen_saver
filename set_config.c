@@ -111,6 +111,26 @@ static pattern_t *get_ptn(t_array *ptn_list, char *name)
 	return NULL;
 }
 
+static status_t copy_pattern(action_list_t *dest, action_list_t *org)
+{
+	action_list_t *p;
+	action_list_t *curr;
+
+	if (!dest)
+		return FAIL;
+	p = org;
+	curr = dest;
+	while (p)
+	{
+		curr->func = p->func;
+		p = p->next;
+		if (!(curr->next = calloc(1, sizeof(action_list_t))))
+			return FAIL;
+		curr = curr->next;
+	}
+	return SUCCESS;
+}
+
 static status_t set_pattern(arg_t *arg, char *name_str, char ***lines)
 {
 	char *name;
@@ -154,11 +174,11 @@ static status_t set_pattern(arg_t *arg, char *name_str, char ***lines)
 		else if (get_ptn(arg->pattern_list, func))
 		{
 			if (strncmp(func, name, strlen(name) + 1))
-				memcpy(action, get_ptn(arg->pattern_list, func)->ptn, sizeof(action_list_t));
+				copy_pattern(action, get_ptn(arg->pattern_list, func)->ptn);
 			else
 			{
 				if (get_ptn(arg->pattern_list, func) && get_ptn(arg->pattern_list, func)->ptn)
-					memcpy(action, get_ptn(arg->pattern_list, func)->ptn, sizeof(action_list_t));
+					copy_pattern(action, get_ptn(arg->pattern_list, func)->ptn);
 				else
 				{
 					free(action);

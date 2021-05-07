@@ -192,7 +192,6 @@ unsigned __stdcall do_actions(void *ag)
 				if (action->func != exit_func)
 					Sleep(1000);
 				(*(action->func))(arg);
-				/*
 				if (action->func == ahead)
 					printf("ahead:");
 				else if (action->func == back)
@@ -204,7 +203,6 @@ unsigned __stdcall do_actions(void *ag)
 				else if (action->func == exit_func)
 					printf("exit:");
 				printf("(0x%x)\n", (size_t)(action->func));
-				*/
 				action = action->next;
 			}
 		}
