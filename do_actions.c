@@ -168,13 +168,18 @@ unsigned __stdcall do_actions(void *ag)
 	enable_gl(&(arg->hdc), &(arg->hrc));
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(-50.0 * arg->scr_size.x / arg->scr_size.y, 50.0 * arg->scr_size.x / arg->scr_size.y, -50.0, 50.0, -50.0, 50.0);
+	glOrtho(0, arg->scr_size.x, 0, arg->scr_size.y, -1, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glColor3f(0.0, 0.0, 0.0);
 	glViewport(0, 0, arg->scr_size.x, arg->scr_size.y);
 	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(0.4, 1.0, 1.0);
+	glBegin(GL_LINES);
+		glVertex2f(arg->scr_size.x / 2, 0);
+		glVertex2f(arg->scr_size.x / 2, arg->scr_size.y);
+	glEnd();
 	SwapBuffers(arg->hdc);
 	while (!arg->end)
 	{
