@@ -57,7 +57,7 @@ LRESULT WINAPI ScreenSaverProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 	switch(uMsg)
 	{
 	case WM_CREATE:
-		if (!(arg = get_arg("lang_model.conf", hWnd)))
+		if (!(arg = get_arg("behavior.conf", hWnd)))
 			exit(0);
 		if (!(render_th = (HANDLE)_beginthreadex(NULL, 0, do_actions, arg, 0, NULL)))
 			exit(0);
