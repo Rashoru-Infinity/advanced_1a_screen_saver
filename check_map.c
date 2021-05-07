@@ -47,9 +47,9 @@ static status_t check_str(char **map)
 		while (p[offset])
 		{
 			if (p[offset] != 'O' && p[offset] != 'X' && p[offset] != 'N' && p[offset] != 'S'
-			&& p[offset] != 'E' && p[offset] != 'W')
+			&& p[offset] != 'E' && p[offset] != 'W' && p[offset] != ' ')
 				return FAIL;
-			if (p[offset] != 'O' && p[offset] != 'X')
+			if (p[offset] != 'O' && p[offset] != 'X' && p[offset] != ' ')
 				++player_count;
 			if (player_count > 1)
 				return FAIL;

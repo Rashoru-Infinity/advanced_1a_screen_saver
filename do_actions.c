@@ -48,7 +48,7 @@ void ahead(void *ag)
 	{
 		if (map_point.x >= 0 && strlen(*line) > (size_t)map_point.x)
 		{
-			if (arg->map[map_point.y][map_point.y] == 'X' || arg->map[map_point.y][map_point.x] == ' ')
+			if (arg->map[map_point.y][map_point.x] == 'X' || arg->map[map_point.y][map_point.x] == ' ')
 				return ;
 			if (fabs(floor(arg->player.pos.x) - new_point.x) > 1 && fabs(floor(arg->player.pos.y) - new_point.y) > 1)
 			{
@@ -190,20 +190,9 @@ unsigned __stdcall do_actions(void *ag)
 					break;
 				render(arg);
 				if (action->func && action->func != exit_func)
-					Sleep(1000);
+					Sleep(100);
 				if (action->func)
 					(*(action->func))(arg);
-				if (action->func == ahead)
-					printf("ahead:");
-				else if (action->func == back)
-					printf("back:");
-				else if (action->func == turnR)
-					printf("turnR:");
-				else if (action->func == turnL)
-					printf("turnL:");
-				else if (action->func == exit_func)
-					printf("exit:");
-				printf("(0x%x)\n", (size_t)(action->func));
 				action = action->next;
 			}
 		}
