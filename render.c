@@ -117,8 +117,16 @@ static void draw_wall(arg_t *arg, double camera_dist, int px_w)
 	//printf("%f\n", 0.5 / camera_dist * arg->scr_size.y);
 	//printf("%f\n", camera_dist);
 	glBegin(GL_LINES);
-		glVertex2f(px_w, arg->scr_size.y / 2 - 0.5 / camera_dist * arg->scr_size.y);
-		glVertex2f(px_w, arg->scr_size.y / 2 + 0.5 / camera_dist * arg->scr_size.y);
+		if (camera_dist > 1.0)
+		{
+			glVertex2f(px_w, arg->scr_size.y / 2 - 0.5 / camera_dist * arg->scr_size.y);
+			glVertex2f(px_w, arg->scr_size.y / 2 + 0.5 / camera_dist * arg->scr_size.y);
+		}
+		else
+		{
+			glVertex2f(px_w, 0);
+			glVertex2f(px_w, arg->scr_size.y);
+		}
 	glEnd();
 }
 
