@@ -29,7 +29,8 @@ arg_t *get_arg(const char *file_name, HWND hWnd)
 		printf("fail to read file.\n");
 		return NULL;
 	}
-	if (!(arg = set_config(lines)))
+	if (!(arg = set_config(lines)) || !arg->map || !arg->entry_point->size
+	|| ((action_list_t *)(arg->entry_point->contents[arg->entry_point->size - 1]))->func != exit_func)
 	{
 		printf("fail to set configure.\n");
 		free(lines);
