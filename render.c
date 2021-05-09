@@ -67,6 +67,7 @@ static void inc_rad(arg_t *arg, double *curr_rad, double heading)
 	*curr_rad = heading + atan2(cos(fov / 2) * tan(*curr_rad - heading) + step, cos(fov / 2));
 }
 
+/*
 static double get_camera_dist(arg_t *arg, double curr_rad, double2d_t ray)
 {
 	double euclid_dist;
@@ -76,10 +77,12 @@ static double get_camera_dist(arg_t *arg, double curr_rad, double2d_t ray)
 	delta_rad = get_min_rad(curr_rad - arg->player.heading);
 	return euclid_dist * cos(delta_rad);
 }
+*/
 
 static int check_obj(arg_t *arg, double curr_rad, double2d_t ray, double2d_t prev_ray, double *camera_dist)
 {
 	double2d_t point;
+	(void)curr_rad;
 
 	if (floor(ray.x) - floor(prev_ray.x) > 0.5)
 	{
@@ -106,7 +109,8 @@ static int check_obj(arg_t *arg, double curr_rad, double2d_t ray, double2d_t pre
 		//printf("%f, %f -> ", ray.y, ray.x);
 		//printf("%d, %d : ", (int)(floor(ray.y)), (int)(floor(ray.x)));
 		//printf("%c\n", arg->map[(int)(floor(ray.y))][(int)(floor(ray.x))]);
-		*camera_dist = get_camera_dist(arg, curr_rad, ray);
+		//*camera_dist = get_camera_dist(arg, curr_rad, ray);
+		*camera_dist = sqrt(pow(arg->player.pos.x - ray.x, 2) + pow(arg->player.pos.y - ray.y, 2));
 	       return 0;	
 	}
 	return 1;
