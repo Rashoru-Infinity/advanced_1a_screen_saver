@@ -155,9 +155,8 @@ static status_t set_pattern(arg_t *arg, char *name_str, char ***lines)
 		array_extend(arg->pattern_list);
 	arg->pattern_list->contents[arg->pattern_list->size++] = ptn;
 	last = NULL;
-	while (1)
+	while (++(*lines) && **lines)
 	{
-		++(*lines);
 		func = skip_space(**lines);
 		if (!(action = calloc(1, sizeof(action_list_t))))
 			return FAIL;
@@ -201,10 +200,12 @@ static status_t set_pattern(arg_t *arg, char *name_str, char ***lines)
 		else
 			ptn->ptn = action;
 		if (strncmp(func, "exit", 5) == 0)
-			break;
+		{
+			++(*lines);
+			return SUCCESS;
+		}
 	}
-	++(*lines);
-	return SUCCESS;
+	return FAIL;
 }
 
 static status_t set_entry_point(arg_t *arg, char ***lines)
@@ -212,10 +213,9 @@ static status_t set_entry_point(arg_t *arg, char ***lines)
 	char *func;
 	action_list_t *action;
 
-	while (1)
+	while (++(*lines) && **lines)
 	{
 		action = NULL;
-		++(*lines);
 		func = skip_space(**lines);
 		if (strncmp(func, "ahead", 6) == 0)
 		{
