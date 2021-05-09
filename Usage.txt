@@ -1,0 +1,19 @@
+#コンパイル
+make
+または
+make all
+
+#オブジェクトファイルの削除
+make clean
+
+#ビルドで生成されたすべてのバイナリを削除
+make fclean
+
+#ビルドで生成されたすべてのバイナリの削除とビルド
+make re
+
+#実行
+al19136 s
+
+#その他の解説は以下のリンクまで
+https://github.com/Rashoru-Infinity/advanced_1a_screen_saver

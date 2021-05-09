@@ -1,6 +1,5 @@
 *.exe
 read_test.c
-*.txt
 *.*.swp
 *.a
 *.o
