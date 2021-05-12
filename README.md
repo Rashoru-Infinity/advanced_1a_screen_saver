@@ -95,5 +95,5 @@ actionやpatternを組み合わせて記述します.
 一連の動作の最後にexitが必要です. 
 
 # Note
-- patternの記述が呼び出し元のpatternまたはentryPointより後に記述することはできません
+- patternの記述を呼び出し元のpatternまたはentryPointより後に記述することはできません
 - WindowsのAPIを使っているため,　LinuxやMacOSなどの環境ではビルドできません
