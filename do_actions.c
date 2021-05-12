@@ -173,9 +173,9 @@ unsigned __stdcall do_actions(void *ag)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glColor3f(0.0, 0.0, 0.0);
 	glViewport(0, 0, arg->scr_size.x, arg->scr_size.y);
 	glClear(GL_COLOR_BUFFER_BIT);
+	//glColor3f(0.1, 0.25, 0.25);
 	glColor3f(0.4, 1.0, 1.0);
 	while (!arg->end)
 	{
